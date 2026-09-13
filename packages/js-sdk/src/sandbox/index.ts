@@ -35,6 +35,9 @@ import { InvalidArgumentError, SandboxError, TemplateError } from '../errors'
 import { ENVD_DEBUG_FALLBACK, ENVD_DEFAULT_USER } from '../envd/versions'
 import { shellQuote } from '../utils'
 
+/** Public sandbox URLs terminate TLS here (Host routing, not a guest TCP map). */
+const SANDBOX_PUBLIC_TLS_PORT = 443
+
 /**
  * Options for sandbox upload/download URL generation.
  */
@@ -113,6 +116,7 @@ export class Sandbox extends SandboxApi {
 
   protected readonly envdPort = 49983
   protected readonly mcpPort = 50005
+  protected readonly publicTlsPort = SANDBOX_PUBLIC_TLS_PORT
 
   protected readonly connectionConfig: ConnectionConfig
   protected readonly envdAccessToken?: string
@@ -565,7 +569,7 @@ export class Sandbox extends SandboxApi {
       return host
     }
 
-    return `${host}:443`
+    return `${host}:${this.publicTlsPort}`
   }
 
   /**

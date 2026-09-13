@@ -26,6 +26,8 @@ class SandboxOpts(TypedDict):
 
 class SandboxBase(ClientFactory):
     mcp_port = 50005
+    # Public sandbox URLs terminate TLS here (Host routing, not a guest TCP map).
+    public_tls_port = 443
 
     default_sandbox_timeout = 300
 
@@ -246,7 +248,7 @@ class SandboxBase(ClientFactory):
         if self.connection_config.debug:
             return host
 
-        return f"{host}:443"
+        return f"{host}:{self.public_tls_port}"
 
     def get_mcp_url(self) -> str:
         """

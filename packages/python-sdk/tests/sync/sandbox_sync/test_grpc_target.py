@@ -15,7 +15,11 @@ def _sandbox(debug: bool) -> SandboxBase:
 
 
 def test_get_grpc_target_uses_tls_port_443():
-    assert _sandbox(debug=False).get_grpc_target(50051) == "50051-abc123.e2b.app:443"
+    sandbox = _sandbox(debug=False)
+    assert (
+        sandbox.get_grpc_target(50051)
+        == f"50051-abc123.e2b.app:{sandbox.public_tls_port}"
+    )
 
 
 def test_get_grpc_target_debug_is_localhost():
